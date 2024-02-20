@@ -4,6 +4,10 @@ const submit = document.getElementById("submit");
 const floorCount = document.getElementById("floor_count");
 const liftCount = document.getElementById("lift_count");
 const floorsContainer = document.getElementById("floors_container");
+const liftsContainer = document.getElementById("lifts_container");
+
+const liftStates = {};
+const requestStack = [];
 
 function handleSubmit(e) {
   e.preventDefault();
@@ -23,6 +27,10 @@ function handleSubmit(e) {
 
   for (let i = 1; i <= floor; i++) {
     createFloor(i === 1, i, floor); // the first element is appended on the top hence the last floor styles are added with first index
+  }
+
+  for (let i = 1; i <= lift; i++) {
+    createLift(i);
   }
 }
 
@@ -61,8 +69,49 @@ function createFloor(lastFloor, index, totalFloors) {
 
 function requestLift(floor, direction) {
   return function () {
-    console.log(`Requesting lift to floor ${floor} in ${direction} direction`);
+    const lift = findLift(floor, direction);
   };
+}
+
+function createLift(index) {
+  const lift = document.createElement("div");
+
+  liftStates[index] = {
+    currentFloor: 1,
+    status: "idle",
+    nextFloor: null,
+  };
+
+  lift.classList.add("lift");
+  liftsContainer.appendChild(lift);
+}
+
+function findLift(floor, direction) {
+  const idleLift = Object.keys(liftStates).find(
+    (lift) => liftStates[lift].status === "idle"
+  );
+
+  console.log(idleLift);
+
+  if (idleLift) {
+    liftStates[idleLift].status = "moving";
+    liftStates[idleLift].nextFloor = floor;
+
+    console.log("liftStates", liftStates);
+    return idleLift;
+  }
+
+  const movingLift = Object.keys(liftStates).find(
+    (lift) => liftStates[lift].status === "moving"
+  );
+
+  console.log(movingLift);
+
+  if (movingLift) {
+    liftStates[movingLift].nextFloor = floor;
+    console.log("af liftStates", liftStates);
+    return movingLift;
+  }
 }
 
 submit.addEventListener("click", handleSubmit);

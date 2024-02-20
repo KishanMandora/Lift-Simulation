@@ -6,6 +6,7 @@
 
 .container {
   width: 100%;
+  display: flex;
 }
 
 .sidenav {
@@ -61,4 +62,48 @@
 
 .summary-count {
   font-weight: 700;
+}
+
+.canvas {
+  margin: 0 auto;
+  min-width: 75%;
+  height: 500px;
+}
+
+.floors-container {
+  margin-top: 2rem;
+}
+
+.floor {
+  width: 100%;
+  height: 6.25rem;
+  border-bottom: 1px solid #000;
+}
+
+.floor--last {
+  border-top: 1px solid #000;
+}
+
+.floor-btn-container {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.floor-number {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-top: 0.625rem;
+}
+
+.floor-btn {
+  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
 }

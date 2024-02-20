@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RDS Lift Simulation</title>
+    <link rel="stylesheet" href="./css/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidenav">
+        <h2 class="title">Lift Simulation</h2>
+        <form class="form">
+          <label for="floors" class="form-label"
+            >Enter number of floors
+            <input
+              type="number"
+              id="floors"
+              name="floors"
+              placeholder="Number of floors"
+              required
+              class="form-input"
+            />
+          </label>
+
+          <label for="lifts" class="form-label"
+            >Enter number of lifts
+            <input
+              type="number"
+              id="lifts"
+              name="lifts"
+              placeholder="Number of lifts"
+              required
+              class="form-input"
+            />
+          </label>
+
+          <button type="submit" id="submit" class="btn">Submit</button>
+        </form>
+        <div>
+          <div class="summarize-text">
+            No. of Floors : <span class="summary-count" id="floor_count"></span>
+          </div>
+          <div class="summarize-text">
+            No. of Lifts : <span class="summary-count" id="lift_count"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./js/main.js"></script>
+  </body>
+</html>

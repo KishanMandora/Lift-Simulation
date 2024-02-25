@@ -88,7 +88,6 @@ function createLift(index) {
   lift.id = `lift-${index}`;
   doorLeft.classList.add("door", "door--left");
   doorRight.classList.add("door", "door--right");
-  
 
   lift.appendChild(doorLeft);
   lift.appendChild(doorRight);
@@ -123,12 +122,45 @@ function findLift(floor, direction) {
   // }
 
   const idleLift = document.getElementById(`lift-1`);
-  idleLift.style.transform = `translateY(${(floor * -100) + 100}px)`;
-  idleLift.style.transition = `transform 1s`;
+  const idleListFloor = liftStates[1].currentFloor;
+  const floorDiff = Math.abs(idleListFloor - floor);
 
-  console.log(floor * -100);
+  setTimeout(() => {
+    liftStates[1].currentFloor = floor;
+    console.log("floorDiff", floorDiff);
+    idleLift.style.transform = `translateY(${floor * -100 + 100}px)`;
+    idleLift.style.transition = `transform ${floorDiff}s`;
+  }, 0);
 
+  setTimeout(() => {
+    openDoors(idleLift);
+  }, floorDiff * 1000);
 
+  setTimeout(
+    () => {
+      closeDoors(idleLift);
+    },
+    floorDiff * 1000 + 3000
+  );
+}
+
+function openDoors(lift) {
+  const [doorLeft, doorRight] = lift.children;
+
+  doorLeft.classList.remove("doorLeftClose");
+  doorRight.classList.remove("doorRightClose");
+  doorLeft.classList.add("doorLeftOpen");
+  doorRight.classList.add("doorRightOpen");
+}
+
+function closeDoors(lift) {
+  const [doorLeft, doorRight] = lift.children;
+
+  console.log("closeDoors", doorLeft, doorRight);
+  doorLeft.classList.remove("doorLeftOpen");
+  doorRight.classList.remove("doorRightOpen");
+  doorLeft.classList.add("doorLeftClose");
+  doorRight.classList.add("doorRightClose");
 }
 
 submit.addEventListener("click", handleSubmit);

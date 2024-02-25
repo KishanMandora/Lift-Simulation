@@ -126,18 +126,29 @@
   background: black;
   margin-bottom: 1rem;
   display: flex;
+  gap: 0.125rem;
+  overflow: hidden;
 }
 
 .door {
   width: 1.5rem;
   height: 100%;
   background: #ffffff97;
+  transition: all 2s;
 }
 
-.door--left {
-  border-right: 1px solid #000; 
+.doorLeftOpen {
+  transform: translateX(-100%);
 }
 
-.door--right {
-  border-left: 1px solid #000;
+.doorRightOpen {
+  transform: translateX(100%);
+}
+
+.doorLeftClose {
+  transform: translateX(0px);
+}
+
+.doorRightClose {
+  transform: translateX(0px);
 }

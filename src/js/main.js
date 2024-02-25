@@ -75,6 +75,8 @@ function requestLift(floor, direction) {
 
 function createLift(index) {
   const lift = document.createElement("div");
+  const doorLeft = document.createElement("div");
+  const doorRight = document.createElement("div");
 
   liftStates[index] = {
     currentFloor: 1,
@@ -83,35 +85,50 @@ function createLift(index) {
   };
 
   lift.classList.add("lift");
+  lift.id = `lift-${index}`;
+  doorLeft.classList.add("door", "door--left");
+  doorRight.classList.add("door", "door--right");
+  
+
+  lift.appendChild(doorLeft);
+  lift.appendChild(doorRight);
   liftsContainer.appendChild(lift);
 }
 
 function findLift(floor, direction) {
-  const idleLift = Object.keys(liftStates).find(
-    (lift) => liftStates[lift].status === "idle"
-  );
+  // const idleLift = Object.keys(liftStates).find(
+  //   (lift) => liftStates[lift].status === "idle"
+  // );
 
-  console.log(idleLift);
+  // console.log(idleLift);
 
-  if (idleLift) {
-    liftStates[idleLift].status = "moving";
-    liftStates[idleLift].nextFloor = floor;
+  // if (idleLift) {
+  //   liftStates[idleLift].status = "moving";
+  //   liftStates[idleLift].nextFloor = floor;
 
-    console.log("liftStates", liftStates);
-    return idleLift;
-  }
+  //   console.log("liftStates", liftStates);
+  //   return idleLift;
+  // }
 
-  const movingLift = Object.keys(liftStates).find(
-    (lift) => liftStates[lift].status === "moving"
-  );
+  // const movingLift = Object.keys(liftStates).find(
+  //   (lift) => liftStates[lift].status === "moving"
+  // );
 
-  console.log(movingLift);
+  // console.log(movingLift);
 
-  if (movingLift) {
-    liftStates[movingLift].nextFloor = floor;
-    console.log("af liftStates", liftStates);
-    return movingLift;
-  }
+  // if (movingLift) {
+  //   liftStates[movingLift].nextFloor = floor;
+  //   console.log("af liftStates", liftStates);
+  //   return movingLift;
+  // }
+
+  const idleLift = document.getElementById(`lift-1`);
+  idleLift.style.transform = `translateY(${(floor * -100) + 100}px)`;
+  idleLift.style.transition = `transform 1s`;
+
+  console.log(floor * -100);
+
+
 }
 
 submit.addEventListener("click", handleSubmit);

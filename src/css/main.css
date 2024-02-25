@@ -123,6 +123,21 @@
   height: 3.75rem;
   width: 3rem;
   border: 1px solid #000;
-  background: skyblue;
+  background: black;
   margin-bottom: 1rem;
+  display: flex;
+}
+
+.door {
+  width: 1.5rem;
+  height: 100%;
+  background: #ffffff97;
+}
+
+.door--left {
+  border-right: 1px solid #000; 
+}
+
+.door--right {
+  border-left: 1px solid #000;
 }

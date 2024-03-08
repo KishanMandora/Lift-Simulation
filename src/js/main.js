@@ -25,6 +25,9 @@ function handleSubmit(e) {
   // clear the floors container
   floorsContainer.innerHTML = "";
 
+  // clear the lifts container
+  liftsContainer.innerHTML = "";
+
   for (let i = 1; i <= floor; i++) {
     createFloor(i === 1, i, floor); // the first element is appended on the top hence the last floor styles are added with first index
   }
@@ -32,6 +35,21 @@ function handleSubmit(e) {
   for (let i = 1; i <= lift; i++) {
     createLift(i);
   }
+
+  setInterval(() => {
+    const idleLifts = Object.keys(liftStates).filter(
+      (lift) => liftStates[lift].status === "idle"
+    );
+    if (requestStack.length > 0) {
+
+      for(let i = 0; (i < idleLifts.length) && (requestStack.length > 0); i++) {
+        const request = requestStack.shift();
+
+        findLift(request.floor, idleLifts[i]);
+        liftStates[idleLifts[i]].status = "moving";
+      }
+    }
+  }, 1000);
 }
 
 function createFloor(lastFloor, index, totalFloors) {
@@ -51,9 +69,9 @@ function createFloor(lastFloor, index, totalFloors) {
   upButton.classList.add("floor-btn");
   downButton.classList.add("floor-btn");
 
-  upButton.addEventListener("click", requestLift(currentFloor, "up"));
+  upButton.addEventListener("click", requestLift(currentFloor));
 
-  downButton.addEventListener("click", requestLift(currentFloor, "down"));
+  downButton.addEventListener("click", requestLift(currentFloor));
 
   floorButtonsContainer.appendChild(floorNumber);
   floorButtonsContainer.appendChild(upButton);
@@ -67,9 +85,10 @@ function createFloor(lastFloor, index, totalFloors) {
   floorsContainer.appendChild(floor);
 }
 
-function requestLift(floor, direction) {
+function requestLift(floor) {
   return function () {
-    const lift = findLift(floor, direction);
+    requestStack.push({ floor });
+    // const lift = findLift(floor, direction);
   };
 }
 
@@ -94,7 +113,7 @@ function createLift(index) {
   liftsContainer.appendChild(lift);
 }
 
-function findLift(floor, direction) {
+function findLift(floor, liftIndex) {
   // const idleLift = Object.keys(liftStates).find(
   //   (lift) => liftStates[lift].status === "idle"
   // );
@@ -121,13 +140,13 @@ function findLift(floor, direction) {
   //   return movingLift;
   // }
 
-  const idleLift = document.getElementById(`lift-1`);
-  const idleListFloor = liftStates[1].currentFloor;
+  const idleLift = document.getElementById(`lift-${liftIndex}`);
+  const idleListFloor = liftStates[liftIndex].currentFloor;
   const floorDiff = Math.abs(idleListFloor - floor);
 
   setTimeout(() => {
-    liftStates[1].currentFloor = floor;
-    console.log("floorDiff", floorDiff);
+    liftStates[liftIndex].currentFloor = floor;
+
     idleLift.style.transform = `translateY(${floor * -100 + 100}px)`;
     idleLift.style.transition = `transform ${floorDiff}s`;
   }, 0);
@@ -139,6 +158,7 @@ function findLift(floor, direction) {
   setTimeout(
     () => {
       closeDoors(idleLift);
+      liftStates[liftIndex].status = "idle";
     },
     floorDiff * 1000 + 3000
   );
@@ -156,7 +176,6 @@ function openDoors(lift) {
 function closeDoors(lift) {
   const [doorLeft, doorRight] = lift.children;
 
-  console.log("closeDoors", doorLeft, doorRight);
   doorLeft.classList.remove("doorLeftOpen");
   doorRight.classList.remove("doorRightOpen");
   doorLeft.classList.add("doorLeftClose");

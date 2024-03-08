@@ -41,12 +41,20 @@ function handleSubmit(e) {
       (lift) => liftStates[lift].status === "idle"
     );
     if (requestStack.length > 0) {
-
-      for(let i = 0; (i < idleLifts.length) && (requestStack.length > 0); i++) {
+      for (let i = 0; i < idleLifts.length && requestStack.length > 0; i++) {
         const request = requestStack.shift();
 
-        findLift(request.floor, idleLifts[i]);
-        liftStates[idleLifts[i]].status = "moving";
+        const isSameFloor = idleLifts.find((lift) => {
+          return liftStates[lift].currentFloor == request.floor;
+        });
+
+        if (isSameFloor) {
+          findLift(request.floor, isSameFloor);
+          liftStates[isSameFloor].status = "moving";
+        } else {
+          findLift(request.floor, idleLifts[i]);
+          liftStates[idleLifts[i]].status = "moving";
+        }
       }
     }
   }, 1000);
@@ -158,9 +166,15 @@ function findLift(floor, liftIndex) {
   setTimeout(
     () => {
       closeDoors(idleLift);
+    },
+    floorDiff * 1000 + 2250
+  );
+
+  setTimeout(
+    () => {
       liftStates[liftIndex].status = "idle";
     },
-    floorDiff * 1000 + 3000
+    floorDiff * 1000 + 4500
   );
 }
 
